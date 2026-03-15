@@ -24,7 +24,7 @@ public class CardDeliveryTest {
         open("http://localhost:9999");
     }
 
-    // Задача №1: простой ввод (без выпадающих списков и календаря)
+    // Задача №1
     @Test
     @DisplayName("Должен успешно планировать встречу при прямом вводе города и даты")
     void shouldPlanMeetingWithDirectInput() {
@@ -44,7 +44,7 @@ public class CardDeliveryTest {
                 .shouldHave(text("Встреча успешно забронирована"), text(formattedDate));
     }
 
-    // Задача №2: выбор города из списка и даты из календаря с переключением месяца
+    // Задача №2
     @Test
     @DisplayName("Должен планировать встречу с выбором города из списка и даты из календаря на следующий месяц")
     void shouldPlanMeetingWithComplexElementsAndMonthSwitch() {
@@ -78,7 +78,7 @@ public class CardDeliveryTest {
         YearMonth targetYearMonth = YearMonth.from(targetDate);
         System.out.println("Целевой месяц/год: " + targetYearMonth);
 
-        // Определяем количество стрелок
+
         int arrowsCount = $$(".calendar__arrow_direction_right").size();
         System.out.println("Найдено стрелок с классом .calendar__arrow_direction_right: " + arrowsCount);
 
@@ -92,12 +92,12 @@ public class CardDeliveryTest {
                 return;
             }
 
-            // Клик по стрелке для следующего месяца
+
             if (arrowsCount > 1) {
-                // Предполагаем, что вторая стрелка (индекс 1) переключает месяц
+
                 $$(".calendar__arrow_direction_right").get(1).click();
             } else {
-                // Если стрелка только одна, кликаем по ней (но это, вероятно, переключение года)
+
                 $(".calendar__arrow_direction_right").click();
             }
 
@@ -108,7 +108,7 @@ public class CardDeliveryTest {
         throw new AssertionError("Не удалось выбрать дату " + targetDate + " в календаре");
     }
 
-    // Парсит строку вида "Март 2026" в YearMonth
+
     private YearMonth parseHeaderToYearMonth(String header) {
         String[] parts = header.split(" ");
         if (parts.length != 2) {

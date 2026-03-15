@@ -5,10 +5,12 @@ plugins {
 group 'ru.netology'
 version '1.0-SNAPSHOT'
 
+// используем 11 версию языка
 java {
     sourceCompatibility = 11
 }
 
+// кодировка файлов (если используете русский язык в файлах)
 compileJava.options.encoding = "UTF-8"
 compileTestJava.options.encoding = "UTF-8"
 
@@ -18,14 +20,14 @@ repositories {
 
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
-    testImplementation 'com.codeborne:selenide:6.19.1'      // Selenide (совместим с Java 11)
-    testImplementation 'io.github.bonigarcia:webdrivermanager:5.9.3'
+    testImplementation 'com.codeborne:selenide:6.19.1'
 }
 
 test {
     useJUnitPlatform()
-    // Пробрасываем системное свойство для headless-режима (используется в тесте)
+    // в тестах, вызывая `gradlew test -Dselenide.headless=true` будем передавать этот параметр в JVM (где его подтянет Selenide)
+    // свойство selenide.headless используется в проектах на основе Selenide для передачи значения параметра в JVM
     systemProperty 'selenide.headless', System.getProperty('selenide.headless')
-    // Настройки Chrome (менеджер паролей и т.д.)
+    // свойство chromeoptions.prefs используется для задания настроек браузера в проектах на основе Selenide, выключаем менеджер паролей
     systemProperty 'chromeoptions.prefs', System.getProperty('chromeoptions.prefs', "profile.password_manager_leak_detection=false")
 }
