@@ -24,22 +24,19 @@ public class CardDeliveryTest {
     static void setUpAll() {
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--no-sandbox"); // необходимо для CI
+        options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--disable-gpu");
-
-
         if (Boolean.parseBoolean(System.getProperty("selenide.headless", "false"))) {
             options.addArguments("--headless");
         }
-
         Configuration.browserCapabilities = options;
        // Configuration.timeout = 15000; //для тестов
     }
 
     @BeforeEach
     void setUp() {
-        Configuration.holdBrowserOpen = false; // для отладки
+        //  Configuration.holdBrowserOpen = true; // для отладки
         open("http://localhost:9999");
     }
 

@@ -11,21 +11,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set up JDK 11
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           java-version: '11'
           distribution: 'temurin'
 
-      - name: Setup Chrome (fixed version 114)
-        uses: browser-actions/setup-chrome@v1
-        with:
-          chrome-version: '114.0.5735.90'
+      - name: Install Chrome 114 (совместимый с Selenium 4.13.0)
+        run: |
+          wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+          sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable=114.0.5735.90-1
+          sudo apt-mark hold google-chrome-stable
+          google-chrome --version
 
-      - name: Verify Chrome version
-        run: google-chrome --version
+      - name: Verify Chrome can run
+        run: google-chrome --headless --no-sandbox --disable-gpu --dump-dom https://example.com
 
       - name: Start SUT
         run: java -jar ./artifacts/app-card-delivery.jar &
