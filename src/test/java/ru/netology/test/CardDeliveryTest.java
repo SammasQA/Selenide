@@ -15,22 +15,24 @@ import java.time.format.DateTimeFormatter;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.*;
 import static com.codeborne.selenide.Selenide.*;
+import org.openqa.selenium.chrome.ChromeOptions;
+import com.codeborne.selenide.Configuration;
 
 public class CardDeliveryTest {
 
     @BeforeAll
     static void setUpAll() {
         WebDriverManager.chromedriver().setup();
+        // Открываем браузер только для отладки локально
+        if (!"true".equals(System.getProperty("selenide.headless"))) {
+            Configuration.holdBrowserOpen = true;
+        }
        // Configuration.timeout = 15000; //для тестов
     }
 
     @BeforeEach
     void setUp() {
         Configuration.holdBrowserOpen = false; // для отладки
-        // Открываем браузер только для отладки локально
-        if (!"true".equals(System.getProperty("selenide.headless"))) {
-            Configuration.holdBrowserOpen = true;
-        }
         open("http://localhost:9999");
     }
 
