@@ -21,13 +21,14 @@ public class CardDeliveryTest {
     @BeforeAll
     static void setUpAll() {
 
-        WebDriverManager.chromedriver().driverVersion("118.0.5993.70").setup();
-
+        WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
-        options.setBinary("/usr/bin/google-chrome"); // принудительно указываем бинарник
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--disable-gpu");
+        if (Boolean.parseBoolean(System.getProperty("selenide.headless", "false"))) {
+            options.addArguments("--headless");
+        }
 
         if (Boolean.parseBoolean(System.getProperty("selenide.headless", "false"))) {
             options.addArguments("--headless");
@@ -39,7 +40,7 @@ public class CardDeliveryTest {
 
     @BeforeEach
     void setUp() {
-        // Для локальной отладки можно раскомментировать:
+
         // Configuration.holdBrowserOpen = true;
         open("http://localhost:9999");
     }
