@@ -28,7 +28,7 @@ public class CardDeliveryTest {
     void setUp() {
         open("http://localhost:9999");
         Configuration.timeout = 15000;
-        Configuration.holdBrowserOpen = true;
+        Configuration.holdBrowserOpen = false; // для ci false
     }
 
     @Test
