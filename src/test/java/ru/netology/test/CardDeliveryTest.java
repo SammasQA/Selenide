@@ -20,10 +20,11 @@ public class CardDeliveryTest {
 
     @BeforeAll
     static void setUpAll() {
-        // Автоматическая загрузка chromedriver под установленную версию Chrome
-        WebDriverManager.chromedriver().setup();
+
+        WebDriverManager.chromedriver().driverVersion("118.0.5993.70").setup();
 
         ChromeOptions options = new ChromeOptions();
+        options.setBinary("/usr/bin/google-chrome"); // принудительно указываем бинарник
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--disable-gpu");

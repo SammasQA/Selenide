@@ -19,13 +19,23 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
 
+      - name: Remove all existing Chrome versions
+        run: |
+          sudo apt-get remove -y google-chrome-stable || true
+          sudo apt-get purge -y google-chrome-stable || true
+          sudo apt-get autoremove -y || true
+          rm -rf ~/.cache/google-chrome || true
+          rm -rf ~/.config/google-chrome || true
+
       - name: Setup Chrome (version 118)
         uses: browser-actions/setup-chrome@v1
         with:
           chrome-version: '118'
 
-      - name: Verify Chrome version
-        run: google-chrome --version
+      - name: Verify Chrome version and path
+        run: |
+          which google-chrome
+          google-chrome --version
 
       - name: Verify Chrome can run headless
         run: google-chrome --headless --no-sandbox --disable-gpu --dump-dom https://example.com
