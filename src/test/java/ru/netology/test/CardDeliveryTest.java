@@ -23,10 +23,17 @@ public class CardDeliveryTest {
     @BeforeAll
     static void setUpAll() {
         WebDriverManager.chromedriver().setup();
-        // Открываем браузер только для отладки локально
-        if (!"true".equals(System.getProperty("selenide.headless"))) {
-            Configuration.holdBrowserOpen = true;
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--no-sandbox"); // необходимо для CI
+        options.addArguments("--disable-dev-shm-usage");
+        options.addArguments("--disable-gpu");
+
+
+        if (Boolean.parseBoolean(System.getProperty("selenide.headless", "false"))) {
+            options.addArguments("--headless");
         }
+
+        Configuration.browserCapabilities = options;
        // Configuration.timeout = 15000; //для тестов
     }
 
