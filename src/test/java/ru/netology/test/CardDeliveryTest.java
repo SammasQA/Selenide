@@ -7,6 +7,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.chrome.ChromeOptions;
+import com.codeborne.selenide.Configuration;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -24,12 +26,16 @@ public class CardDeliveryTest {
     static void setUpAll() {
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
+
+        options.setBinary("/usr/bin/chromium-browser");
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--disable-gpu");
+
         if (Boolean.parseBoolean(System.getProperty("selenide.headless", "false"))) {
             options.addArguments("--headless");
         }
+
         Configuration.browserCapabilities = options;
        // Configuration.timeout = 15000; //для тестов
     }
