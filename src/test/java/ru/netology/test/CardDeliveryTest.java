@@ -19,8 +19,11 @@ public class CardDeliveryTest {
 
     @BeforeAll
     static void setUpAll() {
-        WebDriverManager.chromedriver().setup();
-        ChromeOptions options = new ChromeOptions();
+
+        WebDriverManager.firefoxdriver().setup();
+
+
+        Configuration.browser = "firefox";
 
         if (Boolean.parseBoolean(System.getProperty("selenide.headless", "false"))) {
             Configuration.headless = true;
