@@ -1,14 +1,11 @@
 package ru.netology.test;
 
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.SelenideElement;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.chrome.ChromeOptions;
-import com.codeborne.selenide.Configuration;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -17,8 +14,6 @@ import java.time.format.DateTimeFormatter;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.*;
 import static com.codeborne.selenide.Selenide.*;
-import org.openqa.selenium.chrome.ChromeOptions;
-import com.codeborne.selenide.Configuration;
 
 public class CardDeliveryTest {
 
@@ -26,17 +21,10 @@ public class CardDeliveryTest {
     static void setUpAll() {
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
-        options.setBinary("/usr/bin/chromium-browser");
-        options.setBinary("/usr/bin/chromium-browser");
-        options.addArguments("--no-sandbox");
-        options.addArguments("--disable-dev-shm-usage");
-        options.addArguments("--disable-gpu");
 
         if (Boolean.parseBoolean(System.getProperty("selenide.headless", "false"))) {
-            options.addArguments("--headless");
+            Configuration.headless = true;
         }
-
-        Configuration.browserCapabilities = options;
        // Configuration.timeout = 15000; //для тестов
     }
 

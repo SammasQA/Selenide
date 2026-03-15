@@ -19,12 +19,11 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
 
-      - name: Install Chromium
+      - name: Install Firefox
         run: |
           sudo apt-get update
-          sudo apt-get install -y chromium-browser
-          chromium-browser --version
-          chromium-browser --headless --no-sandbox --disable-gpu --dump-dom https://example.com || echo "Chromium headless check failed, but continuing"
+          sudo apt-get install -y firefox
+          firefox --version
 
       - name: Start SUT
         run: java -jar ./artifacts/app-card-delivery.jar &
