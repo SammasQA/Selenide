@@ -26,7 +26,7 @@ public class CardDeliveryTest {
     static void setUpAll() {
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
-
+        options.setBinary("/usr/bin/chromium-browser");
         options.setBinary("/usr/bin/chromium-browser");
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
