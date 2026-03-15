@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -19,21 +20,26 @@ public class CardDeliveryTest {
 
     @BeforeAll
     static void setUpAll() {
+        // Автоматическая загрузка chromedriver под установленную версию Chrome
+        WebDriverManager.chromedriver().setup();
 
-        WebDriverManager.firefoxdriver().setup();
-
-
-        Configuration.browser = "firefox";
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--no-sandbox");
+        options.addArguments("--disable-dev-shm-usage");
+        options.addArguments("--disable-gpu");
 
         if (Boolean.parseBoolean(System.getProperty("selenide.headless", "false"))) {
-            Configuration.headless = true;
+            options.addArguments("--headless");
         }
-       // Configuration.timeout = 15000; //для тестов
+
+        Configuration.browserCapabilities = options;
+        // Configuration.timeout = 15000; //
     }
 
     @BeforeEach
     void setUp() {
-        //  Configuration.holdBrowserOpen = true; // для отладки
+        // Для локальной отладки можно раскомментировать:
+        // Configuration.holdBrowserOpen = true;
         open("http://localhost:9999");
     }
 
@@ -45,22 +51,16 @@ public class CardDeliveryTest {
         $$(".menu-item").findBy(text("Москва")).click();
 
         // --- Дата через календарь на неделю вперёд ---
-        // Открываем календарь (кнопка с иконкой рядом с полем даты)
         $("[data-test-id=date] button").click();
-
-        // Ждём появления календаря (любая ячейка с классом calendar__day)
         $(".calendar__day").should(appear, Duration.ofSeconds(5));
 
-        // Вычисляем нужную дату: текущая + 7 дней
         LocalDate targetDate = LocalDate.now().plusDays(7);
         int targetDay = targetDate.getDayOfMonth();
-
-
         $$(".calendar__day").findBy(text(String.valueOf(targetDay))).click();
 
-        // Проверяем, что поле даты заполнилось корректно
         String expectedDate = targetDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
         $("[data-test-id=date] input").shouldHave(value(expectedDate));
+
         // --- Остальные поля ---
         $("[data-test-id=name] input").setValue("Иванов Иван");
         $("[data-test-id=phone] input").setValue("+79111111111");
