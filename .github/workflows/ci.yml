@@ -1,29 +1,53 @@
-name: Java CI with Gradle
+name: Run tests
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
-  build:
-
+  test:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+
       - name: Set up JDK 11
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v4
         with:
           java-version: '11'
-          distribution: 'adopt'
+          distribution: 'temurin'
+
+      - name: Remove all existing Chrome versions
+        run: |
+          sudo apt-get remove -y google-chrome-stable || true
+          sudo apt-get purge -y google-chrome-stable || true
+          sudo apt-get autoremove -y || true
+          rm -rf ~/.cache/google-chrome || true
+          rm -rf ~/.config/google-chrome || true
+
+      - name: Setup Chrome (version 118)
+        uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: '118'
+
+      - name: Verify Chrome version
+        run: |
+          which google-chrome
+          google-chrome --version
+
+      - name: Start SUT
+        run: java -jar ./artifacts/app-card-delivery.jar &
+        id: start-sut
+
+      - name: Wait for SUT to be ready
+        run: |
+          timeout 30s bash -c 'until curl -s --fail http://localhost:9999; do sleep 1; done'
+          echo "SUT is ready!"
+
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-      - name: Start SUT
-        # Запускаем SUT,
-        # имя файла SUT будет отличаться в каждой задаче.
-        # & означает, что в фоновом режиме не блокируем терминал для запуска тестов,
-        # обязательно должен быть для запуска SUT в CI
-        run: java -jar ./artifacts/app-mbank.jar &
-      - name: Build with Gradle
-        # Запускаем автотесты
-        # Для проектов на базе Selenide необходимо добавить параметр для запуска браузера
-        # в headless режиме -Dselenide.headless=true, параметр --info должен остаться
-        run: ./gradlew test -Dselenide.headless=true --info
+
+      - name: Run tests
+        run: ./gradlew test --info -Dselenide.headless=true
