@@ -27,6 +27,10 @@ public class CardDeliveryTest {
     @BeforeEach
     void setUp() {
         Configuration.holdBrowserOpen = false; // для отладки
+        // Открываем браузер только для отладки локально
+        if (!"true".equals(System.getProperty("selenide.headless"))) {
+            Configuration.holdBrowserOpen = true;
+        }
         open("http://localhost:9999");
     }
 
