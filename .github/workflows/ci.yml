@@ -19,13 +19,13 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
 
-      - name: Install Chrome 118 (совместимый с Selenium 4.13.0)
-        run: |
-          wget -q https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_118.0.5993.70-1_amd64.deb
-          sudo apt-get update
-          sudo apt-get install -y ./google-chrome-stable_118.0.5993.70-1_amd64.deb
-          sudo apt-mark hold google-chrome-stable
-          google-chrome --version
+      - name: Setup Chrome (version 118)
+        uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: '118'
+
+      - name: Verify Chrome version
+        run: google-chrome --version
 
       - name: Verify Chrome can run headless
         run: google-chrome --headless --no-sandbox --disable-gpu --dump-dom https://example.com
